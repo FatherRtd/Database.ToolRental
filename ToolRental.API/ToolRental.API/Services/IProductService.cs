@@ -4,6 +4,7 @@ namespace ToolRental.API.Services
 {
 	public interface IProductService
 	{
-		public Task<IEnumerable<Product>> GetProducts();
+		Task<IEnumerable<Models.Response.Product>> GetProducts();
+		Task<IEnumerable<Models.Response.Product>> GetProductsByCategoryId(int id);
 	}
 }

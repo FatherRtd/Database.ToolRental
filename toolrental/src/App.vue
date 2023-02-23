@@ -39,9 +39,15 @@
 
 <script lang="ts">
 import Vue from "vue";
+import Product from "./store/models/Product";
 
 export default Vue.extend({
   components: {},
+  data() {
+    return {
+      products: [] as Product[],
+    };
+  },
 });
 </script>
 
