@@ -43,6 +43,7 @@ export default Vue.extend({
         this.firstName,
         this.lastName
       );
+      console.log(result);
     },
   },
 });
