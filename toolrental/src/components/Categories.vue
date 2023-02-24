@@ -24,9 +24,9 @@
           </a>
         </div>
       </template>
-      <div class="card-content">
+      <div class="card-content child">
         <div class="content" v-for="child in childs(parent.id)" :key="child.id">
-          {{ child.name }}
+          <router-link :to="'/' + child.id">{{ child.name }}</router-link>
         </div>
       </div>
     </b-collapse>

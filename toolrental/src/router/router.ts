@@ -9,10 +9,11 @@ const routeNames = {
   login: "login",
   main: "main",
   orders: "orders",
+  category: "category",
 };
 
 const urls = {
-  main: "/",
+  main: "/:categoryId?",
   signUp: `/${routeNames.signUp}`,
   login: `/${routeNames.login}`,
   orders: `/${routeNames.orders}`,
