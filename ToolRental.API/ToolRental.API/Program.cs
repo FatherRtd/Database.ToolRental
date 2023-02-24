@@ -9,7 +9,9 @@ builder.Services.AddCors(options =>
 	options.AddPolicy(name: "clientOrigins",
 		policy =>
 		{
-			policy.WithOrigins("http://localhost:8080");
+			policy.WithOrigins("http://localhost:8080")
+				.AllowAnyMethod()
+				.AllowAnyHeader();
 		});
 });
 
@@ -25,6 +27,7 @@ builder.Services.AddDbContext<ToolrentalContext>(context =>
 
 builder.Services.AddTransient<IProductService, ProductService>();
 builder.Services.AddTransient<ICategoryService, CategoryService>();
+builder.Services.AddTransient<IUserService, UserService>();
 
 builder.Services.AddHttpContextAccessor();
 

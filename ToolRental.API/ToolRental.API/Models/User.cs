@@ -36,7 +36,7 @@ public partial class User
     /// <summary>
     /// Является администратором
     /// </summary>
-    public uint IsAdmin { get; set; }
+    public bool IsAdmin { get; set; }
 
     public virtual ICollection<RentalOrder> RentalOrders { get; } = new List<RentalOrder>();
 }
