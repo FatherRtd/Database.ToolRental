@@ -1,11 +1,15 @@
+import UserResponse from "@/store/models/UserResponse";
 import axios, { AxiosResponse } from "axios";
 import md5 from "md5";
 
 export default {
-  async logIn(login: string, password: string): Promise<AxiosResponse<string>> {
+  async logIn(
+    login: string,
+    password: string
+  ): Promise<AxiosResponse<UserResponse>> {
     const url = "https://localhost:7068/api/Auth/LogIn";
     const passwordHash = md5(password);
-    return await axios.post<string>(url, {
+    return await axios.post<UserResponse>(url, {
       login: login,
       password: passwordHash,
       name: "",

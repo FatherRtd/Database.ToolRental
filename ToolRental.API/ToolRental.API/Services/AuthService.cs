@@ -19,7 +19,7 @@ namespace ToolRental.API.Services
 			_configuration = configuration;
 		}
 
-		public async Task<string> LogIn(UserRequest newUser)
+		public async Task<Models.Response.UserResponse> LogIn(UserRequest newUser)
 		{
 			var response = await _dbContext.Users.FirstOrDefaultAsync(x => x.Login == newUser.Login);
 			if (response == null || response.Md5password != newUser.Password)
@@ -27,8 +27,7 @@ namespace ToolRental.API.Services
 				return null;
 			}
 
-			var userResponse = ToUserResponse(response);
-			return GenerateToken(userResponse);
+			return ToUserResponse(response);
 		}
 
 		public async Task<string> CreateUser(UserRequest newUser)
@@ -52,28 +51,32 @@ namespace ToolRental.API.Services
 			return "Пользователь успешно зарегестрирован!";
 		}
 
-		private Models.Response.User ToUserResponse(Models.User user)
+		private Models.Response.UserResponse ToUserResponse(Models.User user)
 		{
-			var response = new Models.Response.User
+			var response = new Models.Response.UserResponse
 			{
-				Id = user.Id,
-				FirstName = user.Firstname,
-				LastName = user.Lastname,
-				IsAdmin = user.IsAdmin,
+				Token = GenerateToken(user),
+				User = new Models.Response.User
+				{
+					Id = user.Id,
+					FirstName = user.Firstname,
+					LastName = user.Lastname,
+					IsAdmin = user.IsAdmin,
+				},
 			};
 			return response;
 		}
 
-		private string GenerateToken(Models.Response.User responseUser)
+		private string GenerateToken(Models.User user)
 		{
 			var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
 			var cridentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 			var claims = new List<Claim>
 			{
-				new Claim("id", responseUser.Id.ToString()),
-				new Claim("firstName", responseUser.FirstName),
-				new Claim("lastName", responseUser.LastName),
-				new Claim("isAdmin", responseUser.IsAdmin ? "1" : "0")
+				new Claim("id", user.Id.ToString()),
+				new Claim("firstName", user.Firstname),
+				new Claim("lastName", user.Lastname),
+				new Claim("isAdmin", user.IsAdmin ? "1" : "0")
 			};
 			var token = new JwtSecurityToken(_configuration["Jwt:Issuer"], _configuration["Jwt:Audience"], 
 				claims: claims,

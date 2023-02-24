@@ -36,11 +36,7 @@
 
 <script lang="ts">
 import Vue from "vue";
-export default Vue.extend({
-  mounted: function () {
-    console.log(localStorage.getItem("toolrentaltoken"));
-  },
-});
+export default Vue.extend({});
 </script>
 
 <style></style>

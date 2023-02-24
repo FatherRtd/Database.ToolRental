@@ -32,8 +32,8 @@ export default Vue.extend({
     logIn: async function (): Promise<void> {
       const result = await userService.logIn(this.login, this.password);
 
-      localStorage.setItem("toolrentaltoken", result.data);
-
+      localStorage.setItem("toolrentaltoken", result.data.token);
+      console.log(result.data);
       if (result.status == 200) {
         router.push({ name: "main" });
       }

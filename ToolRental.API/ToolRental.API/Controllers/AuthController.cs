@@ -16,18 +16,18 @@ namespace ToolRental.API.Controllers
 		}
 
 		[HttpPost(nameof(LogIn))]
-		public async Task<ActionResult<string>> LogIn([FromBody] UserRequest user)
+		public async Task<ActionResult<Models.Response.UserResponse>> LogIn([FromBody] UserRequest user)
 		{
 			var response = await authService.LogIn(user);
 			if (response == null)
 			{
-				return BadRequest("Не верное имя пользователя или пароль!");
+				return BadRequest("Неверное имя пользователя или пароль!");
 			}
 			return Ok(response);
 		}
 
 		[HttpPost(nameof(CreateUser))]
-		public async Task<ActionResult<string>> CreateUser([FromBody] UserRequest user)
+		public async Task<ActionResult> CreateUser([FromBody] UserRequest user)
 		{
 			var response = await authService.CreateUser(user);
 			if (response == null)
