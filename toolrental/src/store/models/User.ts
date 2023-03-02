@@ -16,6 +16,6 @@ export default class User implements IUser {
   isAdmin = false;
 
   public get fullName(): string {
-    return this.firstName + "" + this.lastName;
+    return this.firstName + " " + this.lastName;
   }
 }

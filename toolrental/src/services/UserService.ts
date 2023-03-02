@@ -1,15 +1,12 @@
-import UserResponse from "@/store/models/UserResponse";
+import IUser from "@/store/models/User";
 import axios, { AxiosResponse } from "axios";
 import md5 from "md5";
 
 export default {
-  async logIn(
-    login: string,
-    password: string
-  ): Promise<AxiosResponse<UserResponse>> {
+  async logIn(login: string, password: string): Promise<AxiosResponse<string>> {
     const url = "https://localhost:7068/api/Auth/LogIn";
     const passwordHash = md5(password);
-    return await axios.post<UserResponse>(url, {
+    return await axios.post<string>(url, {
       login: login,
       password: passwordHash,
       name: "",
@@ -31,6 +28,15 @@ export default {
       password: passwordHash,
       firstName: name,
       lastName: surName,
+    });
+  },
+
+  async getUser(id: number): Promise<AxiosResponse<IUser>> {
+    const url = "https://localhost:7068/api/User/GetUser";
+    const token = localStorage.getItem("toolrentaltoken");
+    return await axios.get<IUser>(url, {
+      params: { id: id },
+      headers: { Authorization: `Bearer ${token}` },
     });
   },
 };

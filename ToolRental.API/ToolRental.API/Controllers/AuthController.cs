@@ -16,7 +16,7 @@ namespace ToolRental.API.Controllers
 		}
 
 		[HttpPost(nameof(LogIn))]
-		public async Task<ActionResult<Models.Response.UserResponse>> LogIn([FromBody] UserRequest user)
+		public async Task<ActionResult<string>> LogIn([FromBody] UserRequest user)
 		{
 			var response = await authService.LogIn(user);
 			if (response == null)

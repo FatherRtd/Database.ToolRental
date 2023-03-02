@@ -19,7 +19,7 @@ namespace ToolRental.API.Services
 			_configuration = configuration;
 		}
 
-		public async Task<Models.Response.UserResponse> LogIn(UserRequest newUser)
+		public async Task<string> LogIn(UserRequest newUser)
 		{
 			var response = await _dbContext.Users.FirstOrDefaultAsync(x => x.Login == newUser.Login);
 			if (response == null || response.Md5password != newUser.Password)
@@ -27,7 +27,7 @@ namespace ToolRental.API.Services
 				return null;
 			}
 
-			return ToUserResponse(response);
+			return GenerateToken(response);
 		}
 
 		public async Task<string> CreateUser(UserRequest newUser)
@@ -49,22 +49,6 @@ namespace ToolRental.API.Services
 			_dbContext.SaveChanges();
 			var newUserResponse = await _dbContext.Users.FirstOrDefaultAsync(x => x.Login == newUser.Login);
 			return "Пользователь успешно зарегестрирован!";
-		}
-
-		private Models.Response.UserResponse ToUserResponse(Models.User user)
-		{
-			var response = new Models.Response.UserResponse
-			{
-				Token = GenerateToken(user),
-				User = new Models.Response.User
-				{
-					Id = user.Id,
-					FirstName = user.Firstname,
-					LastName = user.Lastname,
-					IsAdmin = user.IsAdmin,
-				},
-			};
-			return response;
 		}
 
 		private string GenerateToken(Models.User user)

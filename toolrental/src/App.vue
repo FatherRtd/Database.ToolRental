@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <NavBar></NavBar>
+    <NavBar />
     <router-view class="pt-3"></router-view>
   </div>
 </template>
@@ -8,10 +8,19 @@
 <script lang="ts">
 import Vue from "vue";
 import NavBar from "@/components/NavBar.vue";
+import User from "./store/models/User";
 
 export default Vue.extend({
   components: {
     NavBar,
+  },
+  data() {
+    return {
+      user: null as User | null,
+    };
+  },
+  async mounted() {
+    this.$store.dispatch("getUser");
   },
 });
 </script>
