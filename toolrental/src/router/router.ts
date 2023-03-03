@@ -11,6 +11,7 @@ const routeNames = {
   main: "main",
   orders: "orders",
   category: "category",
+  product: "product",
 };
 
 const urls = {
@@ -18,6 +19,7 @@ const urls = {
   signUp: `/${routeNames.signUp}`,
   login: `/${routeNames.login}`,
   orders: `/${routeNames.orders}`,
+  product: `/${routeNames.product}/:productId?`,
 };
 
 export { urls };
@@ -26,6 +28,7 @@ const Main = () => import("@/views/MainPage.vue");
 const Login = () => import("@/views/LoginPage.vue");
 const SignUp = () => import("@/views/SignUpPage.vue");
 const Orders = () => import("@/views/OrdersPage.vue");
+const Product = () => import("@/views/ProductPage.vue");
 
 const routes: Array<RouteConfig> = [
   {
@@ -48,6 +51,11 @@ const routes: Array<RouteConfig> = [
     path: urls.orders,
     component: Orders,
   },
+  {
+    name: routeNames.product,
+    path: urls.product,
+    component: Product,
+  },
 ];
 
 const router = new VueRouter({
@@ -62,7 +70,8 @@ router.beforeEach((to, from, next) => {
     loggedIn == false &&
     to.name != routeNames.login &&
     to.name != routeNames.signUp &&
-    to.name != routeNames.main
+    to.name != routeNames.main &&
+    to.name != routeNames.product
   ) {
     next({ name: routeNames.main });
     return false;
