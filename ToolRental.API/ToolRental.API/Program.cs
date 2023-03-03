@@ -80,6 +80,7 @@ builder.Services.AddTransient<IProductService, ProductService>();
 builder.Services.AddTransient<ICategoryService, CategoryService>();
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IAuthService, AuthService>();
+builder.Services.AddTransient<IRentalOrderService, RentalOrderService>();
 
 builder.Services.AddHttpContextAccessor();
 

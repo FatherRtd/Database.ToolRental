@@ -57,6 +57,7 @@
 </template>
 
 <script lang="ts">
+import router from "@/router/router";
 import User from "@/store/models/User";
 import Vue from "vue";
 
@@ -65,6 +66,9 @@ export default Vue.extend({
     logOut() {
       localStorage.removeItem("toolrentaltoken");
       this.$store.commit("setUser", null);
+      if (router.currentRoute.name != "main") {
+        router.push({ name: "main" });
+      }
     },
   },
   computed: {

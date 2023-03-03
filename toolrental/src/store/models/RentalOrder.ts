@@ -27,4 +27,24 @@ export default class RentalOrder implements IRentalOrder {
   orderEndDate = new Date();
   rentalPrice = 0;
   isDone = false;
+
+  public get productName(): string {
+    if (this.product?.name == null) {
+      return "";
+    } else {
+      return this.product?.name;
+    }
+  }
+
+  public get userName(): string {
+    if (this.user?.fullName == null) {
+      return "";
+    } else {
+      return this.user?.fullName;
+    }
+  }
+
+  public get orderStatus(): string {
+    return this.isDone ? "Завершён" : "В процессе";
+  }
 }

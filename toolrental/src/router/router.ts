@@ -1,6 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import { RouteConfig } from "vue-router/types/router";
+import store from "@/store/store";
 
 Vue.use(VueRouter);
 
@@ -52,6 +53,21 @@ const routes: Array<RouteConfig> = [
 const router = new VueRouter({
   mode: "history",
   routes: routes,
+});
+
+router.beforeEach((to, from, next) => {
+  const loggedIn = store.state.user != null;
+
+  if (
+    loggedIn == false &&
+    to.name != routeNames.login &&
+    to.name != routeNames.signUp &&
+    to.name != routeNames.main
+  ) {
+    next({ name: routeNames.main });
+    return false;
+  }
+  next();
 });
 
 export default router;
