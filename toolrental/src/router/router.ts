@@ -19,7 +19,7 @@ const urls = {
   signUp: `/${routeNames.signUp}`,
   login: `/${routeNames.login}`,
   orders: `/${routeNames.orders}`,
-  product: `/${routeNames.product}/:productId?`,
+  product: `/${routeNames.product}/:productId`,
 };
 
 export { urls };

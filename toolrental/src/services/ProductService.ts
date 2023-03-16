@@ -11,4 +11,9 @@ export default {
     const url = "https://localhost:7068/api/Product/GetProductsByCategoryId";
     return await axios.get<IProduct[]>(url, { params: { id: id } });
   },
+
+  async getProductById(id: number): Promise<AxiosResponse<IProduct>> {
+    const url = "https://localhost:7068/api/Product/GetProductById";
+    return await axios.get<IProduct>(url, { params: { id: id } });
+  },
 };

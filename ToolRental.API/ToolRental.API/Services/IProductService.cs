@@ -6,5 +6,6 @@ namespace ToolRental.API.Services
 	{
 		Task<IEnumerable<Models.Response.Product>> GetProducts();
 		Task<IEnumerable<Models.Response.Product>> GetProductsByCategoryId(int id);
+		Task<Models.Response.Product> GetProductById(int id);
 	}
 }

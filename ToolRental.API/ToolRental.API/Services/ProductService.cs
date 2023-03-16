@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ToolRental.API.Models;
-using Product = ToolRental.API.Models.Response.Product;
 
 namespace ToolRental.API.Services
 {
@@ -19,10 +18,18 @@ namespace ToolRental.API.Services
 			return ToProductResponse(response);
 		}
 
-		public async Task<IEnumerable<Product>> GetProductsByCategoryId(int id)
+		public async Task<IEnumerable<Models.Response.Product>> GetProductsByCategoryId(int id)
 		{
-			var response = await _dbContext.Products.Where(p => p.CategoryId == id).Include(pc => pc.Category.Parent).ToListAsync();
+			var response = await _dbContext.Products.Where(p => p.CategoryId == id).Include(pc => pc.Category.Parent)
+				.ToListAsync();
 			return ToProductResponse(response);
+		}
+
+		public async Task<Models.Response.Product> GetProductById(int id)
+		{
+			var response = await _dbContext.Products.Where(x => x.Id == id).Include(pc => pc.Category.Parent)
+				.ToListAsync();
+			return ToProductResponse(response).FirstOrDefault();
 		}
 
 		private IEnumerable<Models.Response.Product> ToProductResponse(IEnumerable<Models.Product> products)

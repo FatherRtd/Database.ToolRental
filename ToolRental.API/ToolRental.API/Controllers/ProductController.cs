@@ -29,5 +29,15 @@ namespace ToolRental.API.Controllers
 
 			return Ok(result);
 		}
+		[HttpGet(nameof(GetProductById))]
+		public async Task<ActionResult<Models.Response.Product>> GetProductById(int id)
+		{
+			var result = await productService.GetProductById(id);
+			if (result == null)
+			{
+				return BadRequest("Товар не найден!");
+			}
+			return Ok(result);
+		}
 	}
 }
