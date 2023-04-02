@@ -26,7 +26,7 @@ public partial class RentalOrder
     /// <summary>
     /// Дата и время начала аренды
     /// </summary>
-    public DateTime OrderDate { get; set; }
+    public DateTime? OrderDate { get; set; }
 
     /// <summary>
     /// Дата и время окончания аренды

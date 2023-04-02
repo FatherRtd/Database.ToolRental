@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Org.BouncyCastle.Crypto;
 using ToolRental.API.Models;
 
 namespace ToolRental.API.Services
@@ -22,9 +24,66 @@ namespace ToolRental.API.Services
 			return ToRentalOrderResponse(response);
 		}
 
-		public Task AddRentalOrder(Models.Response.RentalOrder newOrder)
+		public async Task<IEnumerable<Models.Response.RentalOrder>> GetAllRentalOrders()
 		{
-			throw new NotImplementedException();
+			var response = await _dbContext.RentalOrders
+				.Include(x => x.User)
+				.Include(x => x.Product)
+				.Include(x => x.Product.Category)
+				.ToListAsync();
+			return ToRentalOrderResponse(response);
+		}
+
+		public async Task<Models.Response.RentalOrder> AcceptRentalOrder(int orderId)
+		{
+			var query = await _dbContext.RentalOrders.Where(x => x.Id == orderId)
+				.Include(x => x.User)
+				.Include(x => x.Product)
+				.Include(x => x.Product.Category).FirstOrDefaultAsync();
+			query.OrderDate = DateTime.Now;
+
+			_dbContext.RentalOrders.Update(query);
+			_dbContext.SaveChanges();
+
+			var result = new List<RentalOrder>();
+			result.Add(query);
+
+			return ToRentalOrderResponse(result).First();
+		}
+
+		public async Task<Models.Response.RentalOrder> CompleteRentalOrder(int orderId)
+		{
+			var query = await _dbContext.RentalOrders.Where(x => x.Id == orderId)
+				.Include(x => x.User)
+				.Include(x => x.Product)
+				.Include(x => x.Product.Category).FirstOrDefaultAsync();
+			query.OrderEndDate = DateTime.Now;
+			query.RentalPrice = (uint?)(((TimeSpan)(query.OrderEndDate - query.OrderDate)).Days * query.Product.RentalPrice);
+
+			_dbContext.RentalOrders.Update(query);
+			_dbContext.SaveChanges();
+
+			var result = new List<RentalOrder>();
+			result.Add(query);
+
+			return ToRentalOrderResponse(result).First();
+		}
+
+		public async Task<string> AddRentalOrder(Models.Response.RentalOrder newOrder)
+		{
+			var query = await _dbContext.RentalOrders.AddAsync(new Models.RentalOrder()
+			{
+				UserId = newOrder.User.Id,
+				ProductId = newOrder.Product.Id,
+				OrderDate = null,
+				OrderEndDate = null,
+				RentalPrice = null,
+				IsDone = false,
+			});
+
+			_dbContext.SaveChanges();
+
+			return "Заказ добавлен";
 		}
 
 		public Task DeleteRentalOrder(int id)

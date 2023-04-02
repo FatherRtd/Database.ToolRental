@@ -1,12 +1,12 @@
 import Product from "./Product";
 import User from "./User";
 
-export default interface IRentalOrder {
+export interface IRentalOrder {
   id: number;
   user: User | null;
   product: Product | null;
-  orderDate: Date;
-  orderEndDate: Date;
+  orderDate: Date | null;
+  orderEndDate: Date | null;
   rentalPrice: number;
   isDone: boolean;
 }
@@ -23,8 +23,8 @@ export default class RentalOrder implements IRentalOrder {
   id = 0;
   user: User | null = null;
   product: Product | null = null;
-  orderDate = new Date();
-  orderEndDate = new Date();
+  orderDate: Date | null = null;
+  orderEndDate: Date | null = null;
   rentalPrice = 0;
   isDone = false;
 

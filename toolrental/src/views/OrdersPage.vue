@@ -1,6 +1,45 @@
 <template>
   <section>
-    <b-table :data="orders" :columns="columns"></b-table>
+    <b-table :data="orders">
+      <b-table-column label="ID" field="id" v-slot="props" sortable>
+        {{ props.row.id }}
+      </b-table-column>
+      <b-table-column label="Заказчик" field="userName" v-slot="props">
+        {{ props.row.userName }}
+      </b-table-column>
+      <b-table-column label="Товар" field="productName" v-slot="props">
+        {{ props.row.productName }}
+      </b-table-column>
+      <b-table-column label="Начало заказа" field="orderDate" v-slot="props">
+        {{ props.row.orderDate }}
+      </b-table-column>
+      <b-table-column
+        label="Окончание заказа"
+        field="orderEndDate"
+        v-slot="props"
+      >
+        {{ props.row.orderEndDate }}
+      </b-table-column>
+      <b-table-column label="Цена" field="rentalPrice" v-slot="props">
+        {{ props.row.rentalPrice }}
+      </b-table-column>
+      <b-table-column label="Статус" field="orderStatus" v-slot="props">
+        {{ props.row.orderStatus }}
+      </b-table-column>
+      <b-table-column label="Действие" v-slot="props">
+        <b-button
+          v-if="props.row.orderDate == null"
+          @click="acceptOrder(props.row)"
+          >Подтвердить</b-button
+        >
+        <b-button
+          v-else
+          :disabled="props.row.orderEndDate != null"
+          @click="completeOrder(props.row)"
+          >Завершить</b-button
+        >
+      </b-table-column>
+    </b-table>
   </section>
 </template>
 
@@ -14,50 +53,44 @@ export default Vue.extend({
     return {
       isLoading: false,
       orders: [] as RentalOrder[],
-      columns: [
-        {
-          field: "id",
-          label: "ID",
-          width: "40",
-          numeric: true,
-        },
-        {
-          field: "userName",
-          label: "Имя клиента",
-        },
-        {
-          field: "productName",
-          label: "Наименование товара",
-        },
-        {
-          field: "orderDate",
-          label: "Дата начала заказа",
-        },
-        {
-          field: "orderEndDate",
-          label: "Дата окончания аренды",
-        },
-        {
-          field: "orderEndDate",
-          label: "Дата окончания аренды",
-        },
-        {
-          field: "rentalPrice",
-          label: "Стоимость аренды",
-        },
-        {
-          field: "orderStatus",
-          label: "Статус",
-        },
-      ],
     };
+  },
+  methods: {
+    async acceptOrder(order: RentalOrder) {
+      try {
+        this.isLoading = true;
+        const result = await rentalOrderService.acceptRentalOrder(order.id);
+        this.orders[this.orders.findIndex((x) => x.id == order.id)] =
+          new RentalOrder(result.data);
+      } finally {
+        this.isLoading = false;
+      }
+    },
+
+    async completeOrder(order: RentalOrder) {
+      console.log(order);
+
+      try {
+        this.isLoading = true;
+        const result = await rentalOrderService.completeRentalOrder(order.id);
+        this.orders[this.orders.findIndex((x) => x.id == order.id)] =
+          new RentalOrder(result.data);
+      } finally {
+        this.isLoading = false;
+      }
+    },
   },
   mounted: async function () {
     try {
       this.isLoading = true;
       const user = this.$store.state.user;
-      const requestOrders = await rentalOrderService.getRentalOrders(user.id);
-      this.orders = requestOrders.data.map((x) => new RentalOrder(x));
+      if (user.isAdmin) {
+        const requestOrders = await rentalOrderService.getAllRentalOrders();
+        this.orders = requestOrders.data.map((x) => new RentalOrder(x));
+      } else {
+        const requestOrders = await rentalOrderService.getRentalOrders(user.id);
+        this.orders = requestOrders.data.map((x) => new RentalOrder(x));
+      }
     } finally {
       this.isLoading = false;
     }
