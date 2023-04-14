@@ -42,7 +42,7 @@ namespace ToolRental.API.Controllers
 		}
 
 		[HttpPost(nameof(AddProduct))]
-		public async Task<ActionResult> AddProduct([FromBody] ProductRequest request)
+		public async Task<ActionResult> AddProduct([FromForm] ProductRequest request)
 		{
 			try
 			{

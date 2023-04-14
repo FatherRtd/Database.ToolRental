@@ -1,10 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Net;
+using Microsoft.EntityFrameworkCore;
 using ToolRental.API.Models;
 using ToolRental.API.Models.Request;
 using Product = ToolRental.API.Models.Response.Product;
 using Amazon.S3;
-using Amazon.S3.Transfer;
-using System.IO;
 using Amazon.S3.Model;
 
 namespace ToolRental.API.Services
@@ -51,23 +50,37 @@ namespace ToolRental.API.Services
 			var bucketName = _config["S3Storage:S3_BUCKET"];
 			var region = _config["S3Storage:S3_REGION"];
 			var endpoint = _config["S3Storage:S3_ENDPOINT"];
-
-			var s3Client = new AmazonS3Client(accessKey, secretKey, region);
-
-			var objectRequest = new PutObjectRequest
+			try
 			{
-				BucketName = bucketName,
-				Key = request.Image.FileName,
-				FilePath = path,
-			};
+				var s3Config = new AmazonS3Config
+				{
+					ServiceURL = endpoint,
+					AuthenticationRegion = region,
+				};
+				var s3Client = new AmazonS3Client(accessKey, secretKey, s3Config);
 
-			var response = await s3Client.PutObjectAsync(objectRequest);
+				var objectRequest = new PutObjectRequest
+				{
+					BucketName = bucketName,
+					Key = request.Image.FileName,
+					FilePath = path
+				};
 
-			if (response.HttpStatusCode != System.Net.HttpStatusCode.OK)
+				var response = await s3Client.PutObjectAsync(objectRequest);
+
+				if (response.HttpStatusCode != HttpStatusCode.OK)
+				{
+					throw new Exception();
+				}
+			}
+			catch(Exception ex)
 			{
 				throw new Exception();
 			}
-			File.Delete(path);
+			finally
+			{
+				File.Delete(path);
+			}
 
 
 			var imageSrc = endpoint + $"/{bucketName}" + $"/{request.Image.FileName}";

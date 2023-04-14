@@ -25,14 +25,18 @@ export default {
     image: File,
     categoryId: number
   ): Promise<AxiosResponse<string>> {
-    const url = "https://localhost:7068/api/Product/GetProductById";
-    return await axios.post<string>(url, {
-      name: name,
-      shortDescription: shortDescription,
-      longDescription: longDescription,
-      rentalPrice: rentalPrice,
-      image: image,
-      categoryId: categoryId,
+    const url = "https://localhost:7068/api/Product/AddProduct";
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("shortDescription", shortDescription);
+    formData.append("longDescription", longDescription);
+    formData.append("rentalPrice", rentalPrice.toString());
+    formData.append("image", image);
+    formData.append("categoryId", categoryId.toString());
+    return await axios.post<string>(url, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
     });
   },
 };

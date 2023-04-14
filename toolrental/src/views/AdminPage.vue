@@ -42,6 +42,7 @@
 import Category from "@/store/models/Category";
 import categoryService from "@/services/CategoryService";
 import Vue from "vue";
+import productService from "@/services/ProductService";
 export default Vue.extend({
   data() {
     return {
@@ -53,13 +54,32 @@ export default Vue.extend({
         longDescription: "",
         rentalPrice: 0,
         image: null as File | null,
-        categoryId: "",
+        categoryId: 0,
       },
     };
   },
   methods: {
     async addProduct() {
-      console.log("add");
+      const request = await productService.addProduct(
+        this.newProduct.name,
+        this.newProduct.shortDescription,
+        this.newProduct.longDescription,
+        this.newProduct.rentalPrice,
+        this.newProduct.image as File,
+        this.newProduct.categoryId
+      );
+
+      if (request.status == 200) {
+        this.$buefy.toast.open({
+          message: "Товар добавлен!",
+          type: "is-success",
+        });
+      } else {
+        this.$buefy.toast.open({
+          message: "Не удалось добавить файл!",
+          type: "is-danger",
+        });
+      }
     },
   },
   mounted: async function () {
