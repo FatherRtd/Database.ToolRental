@@ -26,7 +26,7 @@
       <b-table-column label="Статус" field="orderStatus" v-slot="props">
         {{ props.row.orderStatus }}
       </b-table-column>
-      <b-table-column label="Действие" v-slot="props">
+      <b-table-column v-if="isAdmin" label="Действие" v-slot="props">
         <b-button
           v-if="props.row.orderDate == null"
           @click="acceptOrder(props.row)"
@@ -78,6 +78,11 @@ export default Vue.extend({
       } finally {
         this.isLoading = false;
       }
+    },
+  },
+  computed: {
+    isAdmin(): boolean {
+      return this.$store.state.user.isAdmin;
     },
   },
   mounted: async function () {
