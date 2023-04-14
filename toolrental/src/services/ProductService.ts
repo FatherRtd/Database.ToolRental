@@ -16,4 +16,23 @@ export default {
     const url = "https://localhost:7068/api/Product/GetProductById";
     return await axios.get<IProduct>(url, { params: { id: id } });
   },
+
+  async addProduct(
+    name: string,
+    shortDescription: string,
+    longDescription: string,
+    rentalPrice: number,
+    image: File,
+    categoryId: number
+  ): Promise<AxiosResponse<string>> {
+    const url = "https://localhost:7068/api/Product/GetProductById";
+    return await axios.post<string>(url, {
+      name: name,
+      shortDescription: shortDescription,
+      longDescription: longDescription,
+      rentalPrice: rentalPrice,
+      image: image,
+      categoryId: categoryId,
+    });
+  },
 };

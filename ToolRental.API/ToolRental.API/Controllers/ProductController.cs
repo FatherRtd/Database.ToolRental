@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ToolRental.API.Models.Request;
 using ToolRental.API.Services;
 
 namespace ToolRental.API.Controllers
@@ -38,6 +39,20 @@ namespace ToolRental.API.Controllers
 				return BadRequest("Товар не найден!");
 			}
 			return Ok(result);
+		}
+
+		[HttpPost(nameof(AddProduct))]
+		public async Task<ActionResult> AddProduct([FromBody] ProductRequest request)
+		{
+			try
+			{
+				var result = await productService.AddProduct(request);
+			}
+			catch (Exception e)
+			{
+				return BadRequest();
+			}
+			return Ok();
 		}
 	}
 }

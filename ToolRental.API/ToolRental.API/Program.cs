@@ -92,7 +92,6 @@ if (app.Environment.IsDevelopment())
 	app.UseSwagger();
 	app.UseSwaggerUI();
 }
-
 app.UseAuthentication();
 app.UseRouting();
 app.UseAuthorization();

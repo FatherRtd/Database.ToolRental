@@ -29,7 +29,7 @@
       <b-navbar-item
         v-if="user.isAdmin"
         tag="router-link"
-        :to="{ name: 'orders' }"
+        :to="{ name: 'admin' }"
       >
         Управление товарами
       </b-navbar-item>

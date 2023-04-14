@@ -1,4 +1,4 @@
-﻿using ToolRental.API.Models;
+﻿using ToolRental.API.Models.Request;
 
 namespace ToolRental.API.Services
 {
@@ -7,5 +7,6 @@ namespace ToolRental.API.Services
 		Task<IEnumerable<Models.Response.Product>> GetProducts();
 		Task<IEnumerable<Models.Response.Product>> GetProductsByCategoryId(int id);
 		Task<Models.Response.Product> GetProductById(int id);
+		Task<string> AddProduct(ProductRequest request);
 	}
 }
